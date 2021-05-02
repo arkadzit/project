@@ -1,0 +1,41 @@
+---
+- name: Stop and remove container
+  shell: docker-compose -f docker-compose_upgrade.yaml down
+  args:
+    chdir: /data/docker
+
+- name: remove image
+  shell: docker rmi joomla:php7.4-apache
+
+- name: Syncing files from backup
+  shell: rsync -avH --delete /data/docker/backup/joomla_files /data/docker/joomla-files/
+
+- name: Run previous docker-compose file
+  shell: docker-compose -f docker-compose.yaml up -d
+  args:
+    chdir: /data/docker
+
+- name: Pause for runing app
+  pause:
+    seconds: 10
+
+- name: Curl and check output
+  block:
+    - name: Curl content
+      uri:
+        url: "http://192.168.1.201:8080"
+        return_content: yes
+      register: content
+      failed_when: "'joomla-11sa.local.com' not in content.content"
+    - name: Print content
+      debug:
+        msg: "{{ content }}"
+  rescue:
+    - name: Send message via Slack
+      slack:
+        token: p6gLaGNj4W7NGBFF8bxDZZb9
+        channel: '#alertmanager-notification'
+        username: 'jenkins_build'
+        msg: 'Rollback task: failed'
+        icon_url: https://yt3.ggpht.com/ytc/AAUvwng3UrVjgB0mCtSF37FZyx_NzeCAAbFgdyTkqB5O=s900-c-k-c0x00ffffff-no-rj
+        parse: 'full'
