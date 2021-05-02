@@ -25,7 +25,7 @@
     chdir: /data/docker
 
 - name: Remove docker
-  shell: docker rm joomla
+  shell: docker rm Joomla
 
 - name: Copy docker-compose file to docker directory
   copy:
