@@ -22,7 +22,7 @@
 
 ## Pipeline. High Level Design
 
-
+![Image](Pipeline_image.png)
 
 ---
 
@@ -40,13 +40,15 @@
 
 ---
 
-### Deployment flows short description:
+## Deployment flows short description:
 
-edit
+### Users submit code to github. Jenrins is scheduled to launch a pipeline. Ansible deploys all the necessary infrastructure to run containers, makes backups of databases and applications.
 
-### Rollback flow description and implementation:
+---
 
-edit
+## Rollback flow description and implementation:
+
+### In case of an unsuccessful update, ansible stops and deletes the current container, restores the database and application files from the backup, starts the previous container. Sends notification to slack.
 
 ---
 
