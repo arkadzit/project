@@ -2,5 +2,5 @@
 all:
   hosts:
     node_01:
-      ansible_host: 192.168.100.201
+      ansible_host: 192.168.1.201
       ansible_user: jenkins
