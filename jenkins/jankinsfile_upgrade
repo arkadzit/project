@@ -1,0 +1,29 @@
+pipeline{
+  agent any
+
+  triggers {
+    cron('H 6 * * *')
+  }
+
+  stages{
+    stage('Clone git repo'){
+      steps{
+        git url: 'https://github.com/arkadzit/project.git',
+          credentialsId: 'https_githab_user'
+       }
+    }
+  stage('Run ansible update'){
+    steps{
+      ansiblePlaybook credentialsId: 'master_private_key', disableHostKeyChecking: true, installation: 'ansible', inventory: 'ansible/inv.yaml', playbook: 'ansible/joomla_upgrade.yaml'
+      }
+    }
+  }
+  post {
+    success {
+      slackSend (color: '#00FF00', message: "SUCCESSFULL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+      }
+      failure {
+        slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        }
+    }
+}
