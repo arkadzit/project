@@ -64,7 +64,7 @@
         msg: 'Upgrade task: failed'
         icon_url: https://www.j2store.org/media/k2/items/cache/7586bcdd7a745d843a3897512742ccdb_XL.jpg
         parse: 'full'
-
+        
 - name: joomla_rollback
   include_role:
-  name: joomla_rollback
+    name: joomla_rollback
