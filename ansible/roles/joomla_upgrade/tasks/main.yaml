@@ -58,13 +58,13 @@
   rescue:
     - name: Send message Slack
       slack:
-        token: p6gLaGNj4W7NGBFF8bxDZZb9
+        token: TFBPBNB2L/B020UTZUSBE/2zINJ2xAFrxglmKMSmR4Kufg
         channel: '#alertmanager-notification'
         username: 'jenkins_build'
         msg: 'Upgrade task: failed'
         icon_url: https://www.j2store.org/media/k2/items/cache/7586bcdd7a745d843a3897512742ccdb_XL.jpg
         parse: 'full'
         
-- name: joomla_rollback
-  include_role:
-    name: joomla_rollback
+    - name: joomla_rollback
+      include_role:
+        name: joomla_rollback
