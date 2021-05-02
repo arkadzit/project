@@ -1,21 +1,18 @@
 pipeline{
-  agent {
-        node {
-            label "node_01"
-        }
-    }
+  agent any
+
   triggers { 
-        cron('H 2 * * 7')
+        cron('H 6 * * *')
   }
 
   stages{
     stage('Clone git repo'){
       steps{
-        git credentialsId: 'https_githab_user', 
-            url: 'https://github.com/arkadzit/project.git'
-      }
+        git url: 'https://github.com/arkadzit/project.git',
+          credentialsId: 'https_githab_user'
+       }
     }
-    stage('Docker deploy via ansible'){
+    stage('Jenkins => ansible => Docker-compose'){
       steps{
         ansiblePlaybook credentialsId: 'master_private_key', disableHostKeyChecking: true, installation: 'ansible', inventory: 'ansible/inv.yaml', playbook: 'ansible/play.yaml'
       }
