@@ -8,7 +8,7 @@
   shell: docker rmi joomla:php7.4-apache
 
 - name: Syncing files from backup
-  shell: rsync -avH --delete /data/docker/backup/joomla_files /data/docker/joomla-files/
+  shell: rsync -avH --delete /data/docker/backup/joomla_files /data/docker/joomla_files/
 
 - name: Run previous docker-compose file
   shell: docker-compose -f docker-compose.yaml up -d
