@@ -29,7 +29,7 @@
 
 - name: Copy docker-compose file to docker directory
   copy:
-    src: /var/lib/jenkins/workspace/joomla_upgrade/docker-compose/docker-compose_upgrade.yaml
+    src: /var/lib/jenkins/workspace/project/docker-compose/docker-compose_upgrade.yaml
     dest: /data/docker
     owner: jenkins
     group: jenkins
