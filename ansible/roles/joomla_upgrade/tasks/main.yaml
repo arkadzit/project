@@ -20,12 +20,12 @@
     rsync -avH /data/docker/joomla/ /data/docker/backup/joomla_files/
     rsync -avH /data/docker/db/ /data/docker/backup/db/
 - name: Stop docker
-  shell: docker stop Joomla
+  shell: docker stop joomla
   args:
     chdir: /data/docker
 
 - name: Remove docker
-  shell: docker rm Joomla
+  shell: docker rm joomla
 
 - name: Copy docker-compose file to docker directory
   copy:
@@ -40,9 +40,9 @@
   args:
     chdir: /data/docker
 
-- name: Pause for runing app
+- name: Pause for runing joomla
   pause:
-    seconds: 40
+    seconds: 5
 
 - name: Curl and check output
   block:
