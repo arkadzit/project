@@ -1,0 +1,32 @@
+pipeline{
+  agent {
+        node {
+            label "node_01"
+        }
+    }
+  triggers { 
+        cron('H 2 * * 7')
+  }
+
+  stages{
+    stage('Clone git repo'){
+      steps{
+        git credentialsId: 'https_githab_user', 
+            url: 'https://github.com/arkadzit/project.git'
+      }
+    }
+    stage('Docker deploy via ansible'){
+      steps{
+        ansiblePlaybook credentialsId: 'master_private_key', disableHostKeyChecking: true, installation: 'ansible', inventory: 'ansible/inv.yaml', playbook: 'ansible/play.yaml'
+      }
+    }
+  }
+  post {
+        success {
+            slackSend (color: '#00FF00', message: "SUCCESSFULL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        }
+        failure {
+            slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        }
+    }
+}
