@@ -22,7 +22,7 @@
 
 ## Pipeline. High Level Design
 
-![Image](Pipeline_image.png)
+![Image](https://github.com/arkadzit/sa.it-academy.by/blob/md-sa2-16-21/Arkadzi_Tarkan/project/Pipeline_image.png)
 
 ---
 
