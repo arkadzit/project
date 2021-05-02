@@ -20,13 +20,9 @@
 
 ---
 
-### Technologies which were used in project
-
----
-
 ## Pipeline. High Level Design
 
-image_edit
+
 
 ---
 
@@ -38,9 +34,9 @@ image_edit
 
 ### SCM: GitHub
 
-### CI description: by schedule
+### CI description: by schedule (every day in 6:00 am)
 
-### Other: Docker, Mysql
+### Other: Vagrant, Docker, Mysql
 
 ---
 
