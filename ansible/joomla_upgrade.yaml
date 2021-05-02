@@ -1,0 +1,5 @@
+---
+- hosts: node_01
+  become: true
+  roles:
+    - joomla_upgrade

@@ -1,0 +1,66 @@
+---
+- name: Create directory for backup joomla files
+  file:
+    path: /data/docker/backup/joomla_files
+    state: directory
+    owner: jenkins
+    group: jenkins
+    mode: 0755
+
+- name: Create directory for backup db files
+  file:
+    path: /data/docker/backup/db
+    state: directory
+    owner: jenkins
+    group: jenkins
+    mode: 0755
+
+- name: Sync files
+  shell: | 
+    rsync -avH /data/docker/joomla/ /data/docker/backup/joomla_files/
+    rsync -avH /data/docker/db/ /data/docker/backup/db/
+- name: Stop docker
+  shell: docker stop joomla
+  args:
+    chdir: /data/docker
+
+- name: Remove docker
+  shell: docker rm joomls
+
+- name: Copy docker-compose file to docker directory
+  copy:
+    src: /var/lib/jenkins/workspace/joomla_upgrade/docker-compose/docker-compose_upgrade.yaml
+    dest: /data/docker
+    owner: jenkins
+    group: jenkins
+    mode: 0644
+
+- name: Run docker-compose up
+  shell: docker-compose -f docker-compose_upgrade.yaml up -d
+  args:
+    chdir: /data/docker
+
+- name: Pause for runing app
+  pause:
+    seconds: 40
+
+- name: Curl and check output
+  block:
+    - name: Curl content
+      uri:
+        url: "http://192.168.1.201:8080"
+        return_content: yes
+      register: content
+      failed_when: "'Unable to content' not in content.content"
+    - name: Print content
+      debug:
+        msg: "{{ content }}"
+  rescue:
+    - name: Send message Slack
+      slack:
+        token: p6gLaGNj4W7NGBFF8bxDZZb9
+        channel: '#alertmanager-notification'
+        username: 'jenkins_build'
+        msg: 'Upgrade task: failed'
+        icon_url: https://www.j2store.org/media/k2/items/cache/7586bcdd7a745d843a3897512742ccdb_XL.jpg
+        parse: 'full'
